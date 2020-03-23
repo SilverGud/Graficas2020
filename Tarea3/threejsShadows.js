@@ -95,6 +95,12 @@ async function loadObj(objModelUrl, objectList) {
         objectList.push(object);
         scene.add(object);
 
+        for (let x = 0; x < array.length; x++) {
+            array[x].position.y -= -5 + (x * 5);
+            array[x].attach(object);
+            root.add(array[x]);
+        }
+
     }
     catch (err) {
         return onError(err);
@@ -148,7 +154,20 @@ function createScene(canvas) {
     camera.position.set(-2, 6, 12);
     scene.add(camera);
 
-    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbit = new THREE.OrbitControls(camera, renderer.domElement);
+    orbit.enableRotate = false;
+    orbit.update();
+
+    array = [];
+    for (let x = 0; x < 4; x++) {
+        let commands = new THREE.TransformControls(camera, renderer.domElement);
+        commands.mode = 'rotate';
+        commands.showX = false;
+        commands.showZ = false;
+        commands.setSize(4);
+        commands.addEventListener('change', run);
+        array.push(control)
+    }
 
     // Create a group to hold all the objects
     root = new THREE.Object3D;
@@ -207,56 +226,6 @@ function createScene(canvas) {
     group.add(mesh);
 
     scene.add(root);
-
-    window.addEventListener('keydown', function (event) {
-        switch (event.keyCode) {
-            case 16:
-                control.setTranslationSnap(100);
-                control.setRotationSnap(THREE.MathUtils.degToRad(15));
-                control.setScaleSnap(0.25);
-                break;
-
-            case 81:
-                control.setSpace(control.space === "local" ? "world" : "local");
-                break;
-
-            case 69:
-                control.setMode("rotate");
-                break;
-
-            case 87:
-                control.setMode("translate");
-                break;
-
-            case 107:
-                control.setSize(control.size + 0.1);
-                break;
-
-            case 82:
-                control.setMode("scale");
-                break;
-
-            case 109:
-                control.setSize(Math.max(control.size - 0.1, 0.1));
-                break;
-
-            case 88:
-                control.showX = !control.showX;
-                break;
-
-            case 89:
-                control.showY = !control.showY;
-                break;
-
-            case 90:
-                control.showZ = !control.showZ;
-                break;
-
-            case 32:
-                control.enabled = !control.enabled;
-                break;
-        }
-    });
 
     window.addEventListener('keyup', function (event) {
         switch (event.keyCode) {
