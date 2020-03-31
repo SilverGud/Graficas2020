@@ -37,7 +37,7 @@ async function createScene(canvas) {
   Obj = await loadObj(modelUrl);
   await crearObj(Obj);
 
-  intermedios = iniciarIntermedios(temporizador, 100);
+  intermedios = setInterval(temporizador, 100);
 
   document.addEventListener('mousedown', onDocumentMouseDown);
   window.addEventListener('resize', onWindowResize);
@@ -172,7 +172,7 @@ async function restart() {
   } else {
     borrarIntermedios(intermedios);
   }
-  intermedios = iniciarIntermedios(temporizador, 100);
+  intermedios = setInterval(temporizador, 100);
   puntaje = $('#score span');
   puntaje.text(score);
   tiempo.text(timer);
